@@ -50,6 +50,14 @@ def login():
             if user.nombre == request.form.get("nombre") and user.email == request.form.get("email") and check_password_hash(user.clave, request.form.get("password")):
                 session["nombre"] = request.form.get("nombre")
                 return render_template("inicio.html")
+            else: 
+                error_message = "Nombre, correo y contraseña no coincidentes con un usuario existente"
+                return render_template(
+                "login.html", 
+                error=error_message, 
+                nombre=request.form.get("nombre"),
+                email=request.form.get("email")
+            )
             
         else:
             error_message = "Nombre, correo y contraseña no coincidentes con un usuario existente"

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% if hora < 12 %}
+    <h1>Buenos dias {{ datos.nombre }}</h1>
+    {% elif hora < 21 %}
+    <h1>Buenas tardes {{ datos.nombre }}</h1>
+    {% else %}
+    <h1>Buenas noches {{ datos.nombre }}</h1>
+    {% endif %}
+    <h2>Recibirás las notificaciones en el correo {{datos.email}}</h2>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplicación</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/estilos.css')}}"
+    />
+  </head>
+  <body>
+    <h1>Hola de nuevo {{session.get("nombre")}}</h1>
+    <h2>Comentarios</h2>
+    <ul>
+      <li>
+        <a href="{{url_for('nuevo_usuario')}}">Registrarme como Usuario</a>
+      </li>
+      <li><a href="{{url_for('nuevo_comentario')}}">Comentar</a></li>
+      <li>
+        <a href="{{url_for('listar_comentarios')}}"
+          >Listar todos los comentarios</a
+        >
+      </li>
+      <li>
+        <a href="{{url_for('listar_comentarios_usuario')}}"
+          >Listar comentarios usuario</a
+        >
+      </li>
+      <li><a href="{{url_for('logout')}}"> Cerrar sesión</a></li>
+    </ul>
+  </body>
+</html>

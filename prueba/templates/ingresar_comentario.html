@@ -1,0 +1,21 @@
+{% extends "base_template.html" %} {% block title %} Nuevo Comentario {%
+endblock %} {% block content %}
+<h1>Nuevo comentario</h1>
+<hr />
+<form
+  action="{{url_for('ingresar_comentario')}}"
+  method="POST"
+  class="container"
+>
+  <label for="contenido">{{usuario.nombre}}, escribe tu comentario</label>
+  <textarea
+    name="contenido"
+    placeholder="Comentario"
+    cols="60"
+    rows="8"
+  ></textarea
+  ><br /><br />
+  <input type="hidden" id="userId" name="userId" value="{{usuario.id}}" /><br />
+  <input type="submit" value="Enviar" />
+</form>
+{% endblock %}

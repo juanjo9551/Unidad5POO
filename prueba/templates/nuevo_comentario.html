@@ -1,0 +1,12 @@
+{% extends "base_template.html" %} {% block title %}Comentar {% endblock %} {%
+block content %}
+<h1>Nuevo comentario</h1>
+<hr />
+<form action="{{request.path}}" method="POST" class="container">
+  <label for="email">Correo electronico</label>
+  <input type="email" name="email" id="email" /><br />
+  <label for="password">Ingrese su contraseña</label>
+  <input type="password" name="password" /><br />
+  <input type="submit" value="Buscar" />
+</form>
+{% endblock %}

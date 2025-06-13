@@ -1,0 +1,31 @@
+{% extends "base_template.html" %} {% block title %}Comentarios de usuario {%
+endblock %} {% block content %}
+
+<h1>Comentarios registrados</h1>
+<hr />
+<form action="{{request.path}}" method="POST" class="container">
+  {%if usuarios is not none: %}
+  <label for="usuarios">Usuarios</label><br />
+  <select name="usuarios" id="usuarios" width="500px">
+    {% for usuario in usuarios %}
+    <option value="{{usuario.id}}">{{usuario.nombre}}</option>
+
+    {% endfor %}
+  </select>
+  <br /><br />
+  <input type="submit" class="button1" value="Buscar comentarios" />
+  {% else %}
+  <p>
+    {{usuario_selec.nombre}} ({{usuario_selec.correo}}) escribió los siguientes
+    comentarios
+  </p>
+  <ul>
+    {% for comentario in usuario_selec.comentario %}
+    <li>{{comentario.contenido}}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <br /><br />
+</form>
+
+{% endblock %}

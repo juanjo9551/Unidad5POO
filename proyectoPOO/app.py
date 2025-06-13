@@ -9,6 +9,7 @@ app.config.from_pyfile('config.py')
 from models import db
 from models import Trabajador, RegistroHorario
 
+
 @app.route("/")
 def inicio():
     return render_template("inicio.html")
@@ -25,14 +26,20 @@ def registrar_entrada():
                 return render_template("error.html", error="No hay coincidencias. Intente nuevamente")
             else:
                 if trabajador.legajo == request.form.get("legajo"):
+                    
+                    existe = RegistroHorario.query.filter(
+                        RegistroHorario.trabajador_id == trabajador.id,
+                        db.func.date(RegistroHorario.fecha) == datetime.now().date()
+                    ).first()   
+
+
                     nuevo_registro_horario = RegistroHorario(fecha=datetime.now(), horaEntrada=datetime.now(), horaSalida=None, trabajador_id=trabajador.id)
                     db.session.add(nuevo_registro_horario)
                     db.session.commit()
                     return redirect("/inicio")
                 else:
                     return render_template("error.html", error="El legajo no coincide con un trabajador con el dni ingresado")
-        if request.form.get("legajo") and request.form.get("ultimosdni"):
-            
+       
     else:
         return render_template("registrar_entrada.html")
 @app.route("/registrar_salida")

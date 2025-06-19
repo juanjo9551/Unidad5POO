@@ -1,0 +1,15 @@
+{% extends "base_template.html" %} {% block title %}Registrar salida {% endblock
+%} {% block content %}
+<h1>Registrar salida</h1>
+<form action="{{request.path}}" method="POST" class="container">
+  <label for="legajo">Legajo: </label>
+  <input type="text" name="legajo" id="legajo" value="{{legajo}}" /><br />
+  <label for="ultimosdni">Últimos 4 digitos del dni: </label>
+  <input type="text" name="ultimosdni" value="{{ultimosdni}}" /><br />
+  <input type="submit" value="Buscar" />
+</form>
+{% if error %}
+<p class="msg-error msg-respuesta">{{error or ""}}</p>
+{% endif %} {% if exito %}
+<p class="msg-exito msg-respuesta">{{exito or ""}}</p>
+{% endif %} {% endblock %}

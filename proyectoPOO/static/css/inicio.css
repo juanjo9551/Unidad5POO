@@ -1,0 +1,29 @@
+h3 {
+  margin-bottom: 10px;
+}
+
+.lista-inicio li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  border: 2px solid rgb(224, 224, 224);
+  box-shadow: 0 0 3px 2px #cdcdcd66;
+  width: 300px;
+  border-radius: 5px;
+  position: relative;
+}
+.lista-inicio li a {
+  text-decoration: none;
+  color: rgb(39, 39, 39);
+  width: 100%;
+  display: flex;
+  align-items: center; /* centra verticalmente */
+  height: 100%;
+  padding: 10px;
+}
+
+.lista-inicio li a::after {
+  content: "→"; /* Unicode arrow */
+  margin-left: auto; /* Empuja la flecha a la derecha */
+  color: rgb(189, 189, 189);
+  font-size: 1.2em;
+}

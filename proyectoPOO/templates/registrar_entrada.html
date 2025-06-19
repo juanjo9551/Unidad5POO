@@ -1,12 +1,24 @@
 {% extends "base_template.html" %} {% block title %}Registrar entrada {%
 endblock %} {% block content %}
 <h1>Registrar entrada</h1>
-<hr />
 <form action="{{request.path}}" method="POST" class="container">
-  <label for="legajo">Legajo</label>
-  <input type="text" name="legajo" id="legajo" /><br />
-  <label for="ultimosdni">Últimos 4 digitos del dni</label>
-  <input type="text" name="ultimosdni" /><br />
+  <label for="legajo">Legajo: </label>
+  <input type="text" name="legajo" id="legajo" value="{{legajo}}" /><br />
+  <label for="ultimosdni">Últimos 4 digitos del dni: </label>
+  <input type="text" name="ultimosdni" value="{{ultimosdni}}"/><br />
+  <label for="dependencia">Dependencia: </label>
+  <select name="dependencia" id="dependencia">
+    <option value="D01" {% if dependencia == 'D01' %}selected{% endif %}>D01</option>
+    <option value="D02" {% if dependencia == 'D02' %}selected{% endif %}>D02</option>
+    <option value="D03" {% if dependencia == 'D03' %}selected{% endif %}>D03</option>
+  </select>
+
   <input type="submit" value="Buscar" />
 </form>
+{% if error %}
+<p class="msg-error msg-respuesta">{{error or ""}}</p>
+{% endif %}
+{% if exito %}
+<p class="msg-exito msg-respuesta">{{exito or ""}}</p>
+{% endif %}
 {% endblock %}

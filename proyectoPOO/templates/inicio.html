@@ -6,7 +6,13 @@
     <title>Aplicación</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/estilos.css')}}"
+      href="{{ url_for('static', filename='css/styles.css')}}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
     />
   </head>
   <body>
@@ -15,18 +21,18 @@
       <li>
         <a href="{{url_for('registrar_entrada')}}">Registrar entrada</a>
       </li>
-      <li><a href="{{url_for('nuevo_comentario')}}">Comentar</a></li>
       <li>
-        <a href="{{url_for('listar_comentarios')}}"
-          >Listar todos los comentarios</a
-        >
+        <a href="{{url_for('registrar_salida')}}">Registrar salida</a>
       </li>
       <li>
-        <a href="{{url_for('listar_comentarios_usuario')}}"
-          >Listar comentarios usuario</a
-        >
+        <a href="{{url_for('consultar_registros')}}">Consultar registros</a>
       </li>
-      <li><a href="{{url_for('logout')}}"> Cerrar sesión</a></li>
+      <li>
+        <a href="{{url_for('gen_inf_general')}}">Generar informe general</a>
+      </li>
+      <li>
+        <a href="{{url_for('gen_inf_personal')}}">Generar informe personal</a>
+      </li>
     </ul>
   </body>
 </html>

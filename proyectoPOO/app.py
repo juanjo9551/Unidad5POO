@@ -44,7 +44,7 @@ app.jinja_env.globals.update(registros_filtrados=registros_filtrados)
 
 @app.route("/")
 def inicio():
-    return render_template("inicio2.html")
+    return render_template("inicio.html")
 
 
 

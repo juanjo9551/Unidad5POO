@@ -1,38 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aplicación</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/styles.css')}}"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <h1>Sistema de gestión de asistencias</h1>
-    <ul>
-      <li>
-        <a href="{{url_for('registrar_entrada')}}">Registrar entrada</a>
-      </li>
-      <li>
-        <a href="{{url_for('registrar_salida')}}">Registrar salida</a>
-      </li>
-      <li>
-        <a href="{{url_for('consultar_registros')}}">Consultar registros</a>
-      </li>
-      <li>
-        <a href="{{url_for('gen_inf_general')}}">Generar informe general</a>
-      </li>
-      <li>
-        <a href="{{url_for('gen_inf_personal')}}">Generar informe personal</a>
-      </li>
-    </ul>
-  </body>
-</html>
+{% extends "base_template.html" %} {% block title %}Inicio {% endblock %} {%
+block links %}
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/inicio.css')}}"
+/>
+{% endblock %} {% block content %}
+<h1>Sistema de gestión de asistencias</h1>
+<h3>Seleccione una opción:</h3>
+<ul class="lista-inicio">
+  <li>
+    <a href="{{url_for('registrar_entrada')}}">Registrar entrada</a>
+  </li>
+  <li>
+    <a href="{{url_for('registrar_salida')}}">Registrar salida</a>
+  </li>
+  <li>
+    <a href="{{url_for('consultar_registros')}}">Consultar registros</a>
+  </li>
+  <li>
+    <a href="{{url_for('gen_inf_general')}}">Generar informe general</a>
+  </li>
+  <li>
+    <a href="{{url_for('gen_inf_personal')}}">Generar informe personal</a>
+  </li>
+</ul>
+
+{% endblock %}

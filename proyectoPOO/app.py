@@ -129,7 +129,7 @@ def registrar_salida():
                         db.func.date(RegistroHorario.fecha) == datetime.now().date(),
                         RegistroHorario.horasalida == None
                     ).first()
-                    if registro:
+                    if registro: 
                         registro.horasalida = datetime.now().replace(microsecond=0).time()
                         db.session.commit()
                         return render_template("registrar_salida.html",
@@ -171,7 +171,7 @@ def consultar_registros():
                                         exito=None)
         else:
             ultimosdni = request.form["ultimosdni"]
-            trabajador = Trabajador.query.filter(Trabajador.dni.endswith(ultimosdni)).first()
+            trabajador = Trabajador.query.filter(Trabajador.dni.endswith(ultimosdni), Trabajador.legajo == request.form.get("legajo")).first()
             if trabajador is None:
                 return render_template("consultar_registros.html",
                                         legajo=request.form.get("legajo"),
@@ -180,6 +180,7 @@ def consultar_registros():
                                         fechafin=request.form.get("fechafin"),
                                         error="No hay coincidencias. Intente nuevamente",
                                         exito=None)
+            
             else:
                 if trabajador.legajo == request.form.get("legajo"):
                     registros = RegistroHorario.query.filter(
@@ -194,6 +195,7 @@ def consultar_registros():
                                         fechainicio=request.form.get("fechainicio"),
                                         fechafin=request.form.get("fechafin"),
                                         registros=list(registros),
+                                        mostrar_registros=True,
                                         error=None,
                                         exito=None)
                 else:
@@ -262,8 +264,12 @@ def consultar_datos():
     elif request.method == "POST":
         fechainicio = request.form.get("fechainicio")
         fechafin = request.form.get("fechafin")
-        fechainicio = datetime.strptime(fechainicio, "%Y-%m-%d").date()
-        fechafin = datetime.strptime(fechafin, "%Y-%m-%d").date()
+        try:
+            fechainicio = datetime.strptime(fechainicio, "%Y-%m-%d").date()
+            fechafin = datetime.strptime(fechafin, "%Y-%m-%d").date()
+        except ValueError:
+            fechainicio = ''
+            fechafin = ''
         funcion = request.form.get("funcion")
         dependencia = request.form.get("dependencia")
         if fechainicio and fechafin and funcion and dependencia:
@@ -345,13 +351,28 @@ def gen_inf_personal_consultar_datos():
         fechainicio = request.form.get("fechainicio")
         fechafin = request.form.get("fechafin")
         dni = request.form.get("dni")
+        print(fechainicio, fechafin, dni)
         if fechainicio and fechafin and dni:
-            trabajador = Trabajador.query.filter(Trabajador.dni == dni).first()
-            registros_periodo = RegistroHorario.query.filter(
+            try:
+                fechainicio = datetime.strptime(fechainicio, "%Y-%m-%d").date()
+                fechafin = datetime.strptime(fechafin, "%Y-%m-%d").date()
+                trabajador = Trabajador.query.filter(Trabajador.dni == dni).first()
+                registros_periodo = RegistroHorario.query.filter(
                         RegistroHorario.idtrabajador == trabajador.id,
                         db.func.date(RegistroHorario.fecha).between(datetime.strptime(request.form.get("fechainicio"), "%Y-%m-%d").date(), datetime.strptime(request.form.get("fechafin"), "%Y-%m-%d").date()),
                     )
-            total_time = sum_times([getDifHoras(reg.horaentrada, reg.horasalida) for reg in registros_periodo if reg.horasalida])
+                total_time = sum_times([getDifHoras(reg.horaentrada, reg.horasalida) for reg in registros_periodo if reg.horasalida])
+            except ValueError:
+                return render_template("gen_inf_personal.html",
+                                        legajo=session.get("legajo"),
+                                        ultimosdni=session.get("ultimosdni"),
+                                        fechainicio=fechainicio,
+                                        fechafin=fechafin,
+                                        dni=dni,
+                                        admin=True,
+                                        error="Por favor, ingrese los datos de las fechas",
+                                        exito=None)
+            
             return render_template("gen_inf_personal.html",
                                         legajo=session.get("legajo"),
                                         ultimosdni=session.get("ultimosdni"),
@@ -379,6 +400,4 @@ def gen_inf_personal_consultar_datos():
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True, port=5000)

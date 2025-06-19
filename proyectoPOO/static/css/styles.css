@@ -6,10 +6,13 @@
 
 body {
   background-color: rgb(255, 255, 255);
+  min-height: 100vh;
+  height: 100%;
+  background: linear-gradient(to top, #c4d8ff, #ffffff);
 }
 
 nav {
-  background-color: rgb(58, 108, 255);
+  background-color: #112257;
   height: 80px;
   position: relative;
 }
@@ -24,18 +27,18 @@ nav ul {
 nav li {
   list-style-type: none;
   height: 100%;
-  background-color: rgb(58, 108, 255);
+  background-color: #112257;
   transition: background-color 0.2s ease;
 }
 
 nav li:hover {
-  background-color: rgb(0, 34, 137);
+  background-color: #223a91;
 }
 
 nav a {
   display: flex;
-  align-items: center; /* centra verticalmente */
-  justify-content: center; /* opcional: centra horizontalmente */
+  align-items: center;
+  justify-content: center;
   height: 100%;
   padding: 0 20px;
   background-color: transparent;
@@ -43,7 +46,7 @@ nav a {
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
-  white-space: nowrap; /* evita que el texto se divida en dos líneas */
+  white-space: nowrap;
 }
 
 .section {
@@ -74,23 +77,14 @@ h1 {
 .msg-respuesta {
   width: 500px;
   padding: 10px;
+  margin: 10px;
   border-radius: 10px;
-}
-
-.msg-error {
-  color: red;
-  background-color: #ffc1c1;
-}
-
-.msg-exito {
-  color: rgb(0, 170, 3);
-  background-color: rgb(168, 255, 144);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin: 20px 0 50px 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   background-color: #f9f9f9;
@@ -195,7 +189,7 @@ form.container input[type="submit"]:hover {
 
 .msg-error {
   color: #a10000;
-  background-color: #ffe5e5;
+  background-color: #ffc8c8;
   padding: 10px;
   margin: 10px auto;
   border: 1px solid #a10000;
@@ -206,7 +200,7 @@ form.container input[type="submit"]:hover {
 
 .msg-exito {
   color: #0a640a;
-  background-color: #e6ffe6;
+  background-color: #beffbe;
   padding: 10px;
   margin: 10px auto;
   border: 1px solid #0a640a;
@@ -241,4 +235,8 @@ ul.general li {
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   font-weight: 500;
+}
+
+.mb50 {
+  margin-bottom: 50px;
 }

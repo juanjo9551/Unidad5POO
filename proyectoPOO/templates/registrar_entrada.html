@@ -3,9 +3,9 @@ endblock %} {% block content %}
 <h1>Registrar entrada</h1>
 <form action="{{request.path}}" method="POST" class="container">
   <label for="legajo">Legajo: </label>
-  <input type="text" name="legajo" id="legajo" value="{{legajo}}" /><br />
+  <input type="text" name="legajo" id="legajo" value="{{legajo}}" required /><br />
   <label for="ultimosdni">Últimos 4 digitos del dni: </label>
-  <input type="text" name="ultimosdni" value="{{ultimosdni}}"/><br />
+  <input type="text" name="ultimosdni" id="ultimosdni" value="{{ultimosdni}}" required /><br />
   <label for="dependencia">Dependencia: </label>
   <select name="dependencia" id="dependencia">
     <option value="D01" {% if dependencia == 'D01' %}selected{% endif %}>D01</option>
@@ -13,7 +13,7 @@ endblock %} {% block content %}
     <option value="D03" {% if dependencia == 'D03' %}selected{% endif %}>D03</option>
   </select>
   
-  <input type="submit" value="Buscar" />
+  <input type="submit" value="Registrar" />
 </form>
 {% if error %}
 <p class="msg-error msg-respuesta">{{error or ""}}</p>

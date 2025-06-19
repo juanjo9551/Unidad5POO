@@ -3,27 +3,37 @@ h3 {
 }
 
 .lista-inicio li {
+  position: relative;
   list-style-type: none;
   margin-bottom: 10px;
   border: 2px solid rgb(224, 224, 224);
+  background-color: #fff;
   box-shadow: 0 0 3px 2px #cdcdcd66;
   width: 300px;
   border-radius: 5px;
-  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 .lista-inicio li a {
+  position: relative;
   text-decoration: none;
-  color: rgb(39, 39, 39);
+  color: rgb(0, 0, 0);
   width: 100%;
   display: flex;
-  align-items: center; /* centra verticalmente */
+  align-items: center;
   height: 100%;
   padding: 10px;
+  display: inline-block;
 }
 
 .lista-inicio li a::after {
-  content: "→"; /* Unicode arrow */
-  margin-left: auto; /* Empuja la flecha a la derecha */
-  color: rgb(189, 189, 189);
+  content: "→";
+  margin: left auto;
+  color: rgb(58, 58, 58);
   font-size: 1.2em;
+}
+
+.lista-inicio li:hover {
+  box-shadow: 0 5px 5px 3px #7f7f7f66;
+  transform: translateY(-3px);
 }

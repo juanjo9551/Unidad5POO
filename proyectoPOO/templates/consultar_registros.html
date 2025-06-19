@@ -3,19 +3,32 @@ endblock %} {% block content %}
 <h1>Consultar registros</h1>
 <form action="{{request.path}}" method="POST" class="container">
   <label for="legajo">Legajo: </label>
-  <input type="text" name="legajo" id="legajo" value="{{legajo}}" /><br />
+  <input
+    type="text"
+    name="legajo"
+    id="legajo"
+    value="{{legajo}}"
+    required
+  /><br />
   <label for="ultimosdni">Últimos 4 digitos del dni: </label>
-  <input type="text" name="ultimosdni" value="{{ultimosdni}}" /><br />
-  <label for="dependencia">Dependencia: </label>
-  <label for="fechainicio"></label>
+  <input type="text" name="ultimosdni" value="{{ultimosdni}}" required /><br />
+
+  <label for="fechainicio">Fecha inicio:</label>
   <input
     type="date"
     name="fechainicio"
     id="fechainicio"
     value="{{fechainicio}}"
+    required
   />
-  <label for="fechafin"></label>
-  <input type="date" name="fechafin" id="fechafin" value="{{fechafin}}" />
+  <label for="fechafin">Fecha fin:</label>
+  <input
+    type="date"
+    name="fechafin"
+    id="fechafin"
+    value="{{fechafin}}"
+    required
+  />
   <input type="submit" value="Mostrar registros" />
 </form>
 {% if error %}
@@ -40,13 +53,16 @@ endblock %} {% block content %}
       <td>{{registro.id}}</td>
       <td>{{registro.fecha}}</td>
       <td>{{registro.horaentrada}}</td>
-      <td>{{registro.horasalida}}</td>
+      <td>
+        {% if registro.horasalida %}{{registro.horasalida}}{% else %}-{% endif
+        %}
+      </td>
       <td>{{registro.dependencia}}</td>
       <td>{{registro.trabajador.dni}}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-{% else %}
+{% else %} {% if mostrar_registros %}
 <p class="msg-respuesta msg-normal">No hay registros</p>
-{% endif %} {% endblock %}
+{% endif %} {% endif %} {% endblock %}

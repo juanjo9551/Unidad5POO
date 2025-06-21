@@ -1,0 +1,91 @@
+{% extends "base_template.html" %} {% block title %}Generar informe personal {%
+endblock %} {% block content %}
+<h1>Generar informe personal</h1>
+<form action="{{request.path}}" method="POST" class="container">
+  <label for="legajo">Legajo: </label>
+  <input
+    type="text"
+    name="legajo"
+    id="legajo"
+    value="{{legajo or ''}}"
+    required
+  /><br />
+  <label for="ultimosdni">Últimos 4 digitos del dni: </label>
+  <input
+    type="text"
+    name="ultimosdni"
+    value="{{ultimosdni or ''}}"
+    required
+  /><br />
+  {% if admin %}
+
+  <label for="fechainicio">Fecha inicio </label>
+  <input
+    type="date"
+    name="fechainicio"
+    id="fechainicio"
+    value="{{fechainicio or ''}}"
+    required
+  /><br />
+  <label for="fechafin">Fecha fin </label>
+  <input
+    type="date"
+    name="fechafin"
+    id="fechafin"
+    value="{{fechafin or ''}}"
+    required
+  /><br />
+  <label for="dni">DNI trabajador: </label>
+  <input type="text" name="dni" id="dni" value="{{dni or ''}}" required />
+
+  {% endif %}
+  <input type="submit" value="{%if admin%}Generar{% else %}Buscar{% endif %}" />
+</form>
+{% if error %}
+<p class="msg-error msg-respuesta">{{error or ""}}</p>
+{% endif %} {% if exito %}
+<p class="msg-exito msg-respuesta">{{exito or ""}}</p>
+{% endif %} {% if admin and not error and trabajador%}
+
+<p>
+  Registros horarios del trabajador {{trabajador.nombre}}
+  {{trabajador.apellido}}. DNI: {{trabajador.dni}}. Horas semanales requeridas:
+  {{trabajador.horas}}
+</p>
+{% if registros_periodo %}
+<table>
+  <thead>
+    <tr>
+      <th>ID registro</th>
+      <th>Fecha</th>
+      <th>Hora de entrada</th>
+      <th>Hora de salida</th>
+      <th>Horas trabajadas</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for registro in registros_periodo %} {% if registro.horasalida %}
+    <tr>
+      <td>{{registro.id}}</td>
+      <td>{{registro.fecha}}</td>
+      <td>{{registro.horaentrada}}</td>
+      <td>
+        {% if registro.horasalida %}{{registro.horasalida}}{% else %}-{% endif
+        %}
+      </td>
+      <td>{{getDifHoras(registro.horaentrada, registro.horasalida)}}</td>
+    </tr>
+    {% endif %} {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="msg-normal">
+  No hay registros asociados a este trabajador en el periodo indicado
+</p>
+{% endif %}
+<p>
+  Total de horas trabajadas: {{total_time[0]}} horas, {{total_time[1]}} minutos,
+  {{total_time[2]}} segundos
+</p>
+
+{% endif %} {% endblock %}

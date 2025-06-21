@@ -1,0 +1,97 @@
+{% extends "base_template.html" %} {% block title %}Generar informe gereral {%
+endblock %} {% block content %}
+<h1>Generar informe general</h1>
+<form action="{{request.path}}" method="POST" class="container">
+  <label for="legajo">Legajo: </label>
+  <input type="text" name="legajo" id="legajo" value="{{legajo or ''}}" required /><br />
+  <label for="ultimosdni">Últimos 4 digitos del dni: </label>
+  <input type="text" name="ultimosdni" value="{{ultimosdni or ''}}" required /><br />
+  {% if admin %}
+
+  <label for="fechainicio">Fecha inicio </label>
+  <input
+    type="date"
+    name="fechainicio"
+    id="fechainicio"
+    value="{{fechainicio or ''}}"
+    required
+  /><br />
+  <label for="fechafin">Fecha fin </label>
+  <input
+    type="date"
+    name="fechafin"
+    id="fechafin"
+    value="{{fechafin or ''}}"
+    required
+  /><br />
+  <label for="funcion">Funcion</label>
+  <select name="funcion" id="funcion">
+    <option value="DO" {% if funcion == 'DO' %}selected{% endif %}>DO</option>
+    <option value="AD" {% if funcion == 'AD' %}selected{% endif %}>AD</option>
+    <option value="TE" {% if funcion == 'TE' %}selected{% endif %}>TE</option>
+    <option value="Todas"{% if funcion == 'Todas' %}selected{% endif %}>Todas</option></select
+  ><br />
+  <label for="dependencia">Dependencia </label>
+  <select name="dependencia" id="dependencia">
+    <option value="D01" {% if dependencia == 'D01' %}selected{% endif %}>D01</option>
+    <option value="D02" {% if dependencia == 'D02' %}selected{% endif %}>D02</option>
+    <option value="D03" {% if dependencia == 'D03' %}selected{% endif %}>D03</option>
+    <option value="Todas"{% if dependencia == 'Todas' %}selected{% endif %}>Todas</option></select
+  ><br />
+  {% endif %}
+  <input type="submit" value="{%if admin%}Generar{% else %}Buscar{% endif %}" />
+</form>
+
+{% if error %}
+<p class="msg-error msg-respuesta">{{error or ""}}</p>
+{% endif %}
+{% if exito %}
+<p class="msg-exito msg-respuesta">{{exito or ""}}</p>
+{% endif %}
+{% if admin and not error %}
+
+<ul class="general">
+  {% for trabajador in trabajadores %}
+  <li>
+    {{trabajador.nombre}}
+    {{trabajador.apellido}}. DNI: {{trabajador.dni}}
+  </li>
+
+  {% if registros_filtrados(trabajador, dependencia, fechainicio, fechafin) %}
+  <table>
+    <thead>
+      <tr>
+        <th>ID registro</th>
+        <th>Fecha</th>
+        <th>Hora de entrada</th>
+        <th>Hora de salida</th>
+        <th>Dependencia</th>
+        <th>Horas</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for registro in trabajador.registroHorario %} {% if (dependencia == 'Todas' or registro.dependencia == dependencia) and registro.horasalida %}
+      <tr>
+        <td>{{registro.id}}</td>
+        <td>{{registro.fecha}}</td>
+        <td>{{registro.horaentrada}}</td>
+        <td>{% if registro.horasalida %}{{registro.horasalida}}{% else %}-{% endif %}</td>
+        <td>{{registro.dependencia}}</td>
+        <td>{{getDifHoras(registro.horaentrada, registro.horasalida)}}</td>
+      </tr>
+      {% endif %} 
+      
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  {% if dependencia == "Todas" %}
+  <p class="msg-respuesta mb50">No hay registros en ninguna dependencia para este trabajador</p>
+  {% else %}
+  <p class="msg-respuesta mb50">No existen registros en {{dependencia}} de este trabajador</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</ul>
+
+{% endif %} {% endblock %}

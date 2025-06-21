@@ -2,13 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime, time, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import pandas as pd
 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 from models import db
-from models import Trabajador, RegistroHorario
+from models import Trabajador, RegistroHorario, Producto
 
 
 
@@ -161,62 +162,13 @@ def registrar_salida():
 @app.route("/consultar_registros", methods=["GET", "POST"])
 def consultar_registros():
     if request.method == "POST":
-        if not request.form["legajo"] or not request.form["ultimosdni"] or not request.form["fechainicio"] or not request.form["fechafin"]:
-            return render_template("consultar_registros.html",
-                                        legajo=request.form.get("legajo"),
-                                        ultimosdni=request.form.get("ultimosdni"),
-                                        fechainicio=request.form.get("fechainicio"),
-                                        fechafin=request.form.get("fechafin"),
-                                        error="Por favor, complete los campos restantes",
-                                        exito=None)
-        else:
-            if datetime.strptime(request.form.get("fechafin"), "%Y-%m-%d").date() > datetime.now().date():
-                return render_template("consultar_registros.html",
-                                        legajo=request.form.get("legajo"),
-                                        ultimosdni=request.form.get("ultimosdni"),
-                                        fechainicio=request.form.get("fechainicio"),
-                                        fechafin=request.form.get("fechafin"),
-                                        error="La fecha fin no puede ser mayor a la de hoy",
-                                        exito=None)
- 
-            ultimosdni = request.form["ultimosdni"]
-            trabajador = Trabajador.query.filter(Trabajador.dni.endswith(ultimosdni), Trabajador.legajo == request.form.get("legajo")).first()
-            if trabajador is None:
-                return render_template("consultar_registros.html",
-                                        legajo=request.form.get("legajo"),
-                                        ultimosdni=request.form.get("ultimosdni"),
-                                        fechainicio=request.form.get("fechainicio"),
-                                        fechafin=request.form.get("fechafin"),
-                                        error="No hay coincidencias. Intente nuevamente",
-                                        exito=None)
-            
-            else:
-                if trabajador.legajo == request.form.get("legajo"):
-                    registros = RegistroHorario.query.filter(
-                        RegistroHorario.idtrabajador == trabajador.id,
-                        db.func.date(RegistroHorario.fecha).between(datetime.strptime(request.form.get("fechainicio"), "%Y-%m-%d").date(), datetime.strptime(request.form.get("fechafin"), "%Y-%m-%d").date()),
-                    )
-                    
-                    print(registros)
-                    return render_template("consultar_registros.html",
-                                        legajo=request.form.get("legajo"),
-                                        ultimosdni=request.form.get("ultimosdni"),
-                                        fechainicio=request.form.get("fechainicio"),
-                                        fechafin=request.form.get("fechafin"),
-                                        registros=list(registros),
-                                        mostrar_registros=True,
-                                        error=None,
-                                        exito=None)
-                else:
-                    return render_template("consultar_registros.html",
-                                        legajo=request.form.get("legajo"),
-                                        ultimosdni=request.form.get("ultimosdni"),
-                                        fechainicio=request.form.get("fechainicio"),
-                                        fechafin=request.form.get("fechafin"),
-                                        error="El legajo no coincide con un trabajador con el dni ingresado",
-                                        exito=None)
-    else:
-        return render_template("consultar_registros.html")
+        pass
+    elif request.method == "GET":
+        page = request.args.get('page', 1, type=int)  # get ?page=1
+        per_page = 10  # products per page
+        paginated = Producto.query.paginate(page=page, per_page=per_page)
+        return render_template("productos.html", productos=paginated.items, pagination=paginated)
+        
 
     
 
@@ -412,5 +364,27 @@ def gen_inf_personal_consultar_datos():
 
 
 
+def cargar_productos():
+    # Cargar el archivo Excel
+    df = pd.read_excel('data/productos.xlsx')
+    #cargar desde la fila numero 10
+    df = df.iloc[9:]  # Ignorar las primeras 9 filas
+    # Renombrar las columnas
+    df.columns = ['codigo', 'descripcion', 'precio']
+    # Convertir el DataFrame a una lista de diccionarios
+    productos = df.to_dict(orient='records')
+    # Crear instancias de Producto y agregar a la sesión
+    for producto_data in productos:
+        producto = Producto(
+            codigo=producto_data['codigo'],
+            descripcion=producto_data['descripcion'],
+            precio=producto_data['precio']
+        )
+        db.session.add(producto)
+    # Confirmar los cambios en la base de datos
+    db.session.commit()
+
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()   
     app.run(debug=True, port=5000)

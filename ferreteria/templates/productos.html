@@ -1,0 +1,44 @@
+{% extends "base_template.html" %} {% block title %}Productos{% endblock %} {%
+block content %}
+<h1>Productos</h1>
+
+{% if error %}
+<p class="msg-error msg-respuesta">{{error or ""}}</p>
+{% endif %} {% if exito %}
+<p class="msg-exito msg-respuesta">{{exito or ""}}</p>
+{% endif %} {% if productos %}
+<div class="pagination">
+  {% if pagination.has_prev %}
+  <a href="{{ url_for('consultar_registros', page=pagination.prev_num) }}"
+    >Anterior</a
+  >
+  {% endif %} Página {{ pagination.page }} de {{ pagination.pages }} {% if
+  pagination.has_next %}
+  <a href="{{ url_for('consultar_registros', page=pagination.next_num) }}"
+    >Siguiente</a
+  >
+  {% endif %}
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>ID registro</th>
+      <th>Código</th>
+      <th>Descripción</th>
+      <th>Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for registro in productos %}
+    <tr>
+      <td>{{registro.id}}</td>
+      <td>{{registro.codigo}}</td>
+      <td>{{registro.descripcion}}</td>
+      <td>{{registro.precio}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No hay productos para mostrar.</p>
+{% endif %} {% endblock %}

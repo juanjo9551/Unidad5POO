@@ -1,2 +1,2 @@
 -- SQLite
-select * from registroHorario
+select * from trabajador
